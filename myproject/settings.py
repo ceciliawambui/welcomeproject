@@ -12,6 +12,12 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import dj_database_url
+# cloudinary configurations
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,8 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-z93a(!!4$2=g^++4f4muzz4i$+a&siahgoimviu_)@1vo+t&l9'
-
+SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -39,7 +44,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'myapp',
+    'cloudinary'
 ]
+
+cloudinary.config(
+    cloud_name = config('CLOUDINARY_CLOUD_NAME'),
+    api_key =config('CLOUDINARY_API_KEY'),
+    api_secret = config('CLOUDINARY_API_SECRET')
+)
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -78,20 +90,20 @@ WSGI_APPLICATION = 'myproject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default':{
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'comp', 
-#         'USER': 'comp_user', 
-#         'PASSWORD': '123456',
-#         'HOST': 'localhost',
-#         'PORT': '5432'
-#     }
-# }
 DATABASES = {
-    'default':dj_database_url.parse("postgresql://comp_illz_user:Qe7HvKFcukgZD9GoOHlgDt1wq2Cgln5J@dpg-d0m4dkh5pdvs738t90e0-a.oregon-postgres.render.com/comp_illz")
-    
+    'default':{
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': config('DATABASE_NAME'), 
+        'USER': config('DATABASE_USER'), 
+        'PASSWORD': config('DATABASE_PASSWORD'),
+        'HOST': config('DATABASE_HOST'),
+        'PORT': config('DATABASE_PORT')
+    }
 }
+# DATABASES = {
+#     'default':dj_database_url.parse("postgresql://comp_illz_user:Qe7HvKFcukgZD9GoOHlgDt1wq2Cgln5J@dpg-d0m4dkh5pdvs738t90e0-a.oregon-postgres.render.com/comp_illz")
+    
+# }
 
 
 # Password validation
